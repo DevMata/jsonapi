@@ -4,7 +4,8 @@
 	"description": "A JSON API for a blog serve",
 	"main": "index.js",
 	"scripts": {
-		"compile": ""
+		"compile": "",
+		"watch": "nodemon --watch **/*.ts --exec ts-node main.ts"
 	},
 	"repository": {
 		"type": "git",
