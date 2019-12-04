@@ -7,6 +7,12 @@ interface IPerson {
 	lastName: string
 }
 
+interface IResponse {
+	status: number
+	message?: string
+	queryResult?: any[]
+}
+
 dotenv.config()
 
 const pool = new Pool({
@@ -93,7 +99,21 @@ async function deleteBlogs(id?: number) {
 	const client = await pool.connect()
 
 	try {
+		const validation = await getBlogs(id)
+		const { status } = validation as IResponse
+		if (status === 404) {
+			return validation
+		}
+
+		await client.query('BEGIN')
+
+		await client.query('DELETE FROM "Person" WHERE id=$1', [id])
+
+		await client.query('COMMIT')
+
+		return { status: 200, message: 'Delete successful' }
 	} catch (e) {
+		console.log(e)
 		await client.query('ROLLBACK')
 		return {
 			status: 500,
@@ -108,4 +128,4 @@ function checkIPerson(person: IPerson) {
 	return person.id && person.name && person.lastName ? true : false
 }
 
-export { getBlogs, postBlogs, deleteBlogs, IPerson }
+export { getBlogs, postBlogs, deleteBlogs, IPerson, IResponse }

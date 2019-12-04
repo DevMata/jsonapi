@@ -1,14 +1,7 @@
 import * as http from 'http'
-import * as url from 'url'
-import * as qs from 'querystring'
 
 import { blogsHandler } from './src/blog-handler'
-
-interface IResponse {
-	status: number
-	message?: string
-	queryResult?: any[]
-}
+import { IResponse } from './src/db-handler'
 
 const blogServer = http.createServer((req, res) => {
 	let body: any
