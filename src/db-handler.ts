@@ -124,7 +124,16 @@ async function updateBlogs(id: number, person: IPerson) {
 		const validation = await getBlogs(id)
 		if ((validation as IResponse).status === 404) return validation
 
-		return { status: 200 }
+		await client.query('BEGIN')
+
+		const res = await client.query(
+			'UPDATE "Person" SET name=$1, "lastName"=$2 WHERE id=$3 RETURNING *',
+			[person.name, person.lastName, id]
+		)
+
+		await client.query('COMMIT')
+
+		return { status: 200, queryResult: res.rows }
 	} catch (e) {
 		await client.query('ROLLBACK')
 		return {
