@@ -4,8 +4,9 @@
 	"description": "A JSON API for a blog serve",
 	"main": "index.js",
 	"scripts": {
-		"compile": "",
-		"watch": "nodemon --watch **/*.ts --exec ts-node main.ts"
+		"compile": "tsc && npx prettier ./**/*.js --write & echo Compiled",
+		"watch": "nodemon --watch **/*.ts --exec ts-node main.ts",
+		"start": "node main.js"
 	},
 	"repository": {
 		"type": "git",
