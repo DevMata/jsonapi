@@ -50,7 +50,7 @@ async function getBlogs(id?: number) {
 		console.error(e)
 		return {
 			status: 500,
-			message: 'Error at resolving request'
+			message: 'Error at listing blogs'
 		}
 	} finally {
 		client.release()
@@ -86,7 +86,7 @@ async function postBlogs(person: IPerson) {
 
 		return {
 			status: 500,
-			message: 'Error at insert object'
+			message: 'Error at creating blog'
 		}
 	} finally {
 		client.release()
@@ -94,30 +94,42 @@ async function postBlogs(person: IPerson) {
 }
 
 async function deleteBlogs(id?: number) {
-	if (!id) return { status: 400, message: 'Missing id' }
-
 	const client = await pool.connect()
 
 	try {
 		const validation = await getBlogs(id)
-		const { status } = validation as IResponse
-		if (status === 404) {
-			return validation
-		}
+		if ((validation as IResponse).status === 404) return validation
 
 		await client.query('BEGIN')
-
 		await client.query('DELETE FROM "Person" WHERE id=$1', [id])
-
 		await client.query('COMMIT')
 
-		return { status: 200, message: 'Delete successful' }
+		return { status: 200, message: 'Blog deleted successfully' }
 	} catch (e) {
 		console.log(e)
 		await client.query('ROLLBACK')
 		return {
 			status: 500,
-			message: 'Error at delete object'
+			message: 'Error at deleting blog'
+		}
+	} finally {
+		client.release()
+	}
+}
+
+async function updateBlogs(id: number, person: IPerson) {
+	const client = await pool.connect()
+
+	try {
+		const validation = await getBlogs(id)
+		if ((validation as IResponse).status === 404) return validation
+
+		return { status: 200 }
+	} catch (e) {
+		await client.query('ROLLBACK')
+		return {
+			status: 500,
+			message: 'Error at updating blog'
 		}
 	} finally {
 		client.release()
@@ -128,4 +140,4 @@ function checkIPerson(person: IPerson) {
 	return person.id && person.name && person.lastName ? true : false
 }
 
-export { getBlogs, postBlogs, deleteBlogs, IPerson, IResponse }
+export { getBlogs, postBlogs, deleteBlogs, updateBlogs, IPerson, IResponse }
