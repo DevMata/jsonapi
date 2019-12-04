@@ -38,7 +38,7 @@ async function DELETE(url: string) {
 	const id = blogRegex.test(url)
 		? Number(blogRegex.exec(url)!.groups!.id)
 		: undefined
-
+	console.log(id)
 	return await deleteBlogs(id)
 }
 
