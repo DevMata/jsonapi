@@ -1,4 +1,4 @@
-import { Pool, QueryResult } from 'pg'
+import { Pool } from 'pg'
 import dotenv from 'dotenv'
 
 interface IBlog {
@@ -103,7 +103,6 @@ async function deleteBlogs(id?: number) {
 
 		return { status: 200, message: 'Blog deleted successfully' }
 	} catch (e) {
-		console.log(e)
 		await client.query('ROLLBACK')
 		return {
 			status: 500,
@@ -185,7 +184,6 @@ async function getComments(blog_id: number, comment_id?: number) {
 		}
 		return response
 	} catch (e) {
-		console.error(e)
 		return {
 			status: 500,
 			message: 'Error at listing comments'
@@ -252,7 +250,6 @@ async function deleteComments(blog_id: number, comment_id: number) {
 
 		return { status: 200, message: 'Comment deleted successfully' }
 	} catch (e) {
-		console.log(e)
 		await client.query('ROLLBACK')
 		return {
 			status: 500,
