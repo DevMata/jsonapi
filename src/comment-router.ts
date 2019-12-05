@@ -46,7 +46,7 @@ async function POST(url: string, comment: IComment) {
 	return params!.comment
 		? { status: 400, message: 'Unnecessary parameter. Id not required at POST' }
 		: checkComment(comment)
-		? await postComments(Number(params!.blog_id), comment.content)
+		? await postComments(Number(params!.blog), comment.content)
 		: missingParameters
 }
 

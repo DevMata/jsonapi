@@ -31,7 +31,7 @@ async function getBlogs(id?: number) {
 	let query =
 		'SELECT * FROM blog' +
 		(id ? ` WHERE blog_id=${id}` : '') +
-		' ORDER BY modified_at DESC'
+		' ORDER BY created_at DESC'
 
 	const client = await pool.connect()
 
@@ -141,8 +141,8 @@ async function updateBlogs(id: number, blog: IBlog) {
 
 async function getComments(blog_id: number, comment_id?: number) {
 	let query = comment_id
-		? `SELECT * FROM comment WHERE comment_id = ${comment_id}`
-		: `SELECT * FROM comment WHERE blog_id = ${blog_id} ORDER BY modified_at DESC`
+		? `SELECT * FROM comment WHERE comment_id = ${comment_id} AND blog_id=${blog_id}`
+		: `SELECT * FROM comment WHERE blog_id = ${blog_id} ORDER BY created_at DESC`
 
 	const client = await pool.connect()
 
@@ -150,17 +150,6 @@ async function getComments(blog_id: number, comment_id?: number) {
 		//blog must exist
 		const validation = await getBlogs(blog_id)
 		if ((validation as IResponse).status === 404) return validation
-
-		//comment must belong to the specified blog
-		if (comment_id) {
-			const relation = await client.query(
-				'SELECT 1 FROM comment WHERE comment_id=$1 AND blog_id=$2',
-				[comment_id, blog_id]
-			)
-
-			if (!relation.rowCount)
-				return { status: 405, message: 'Comment must belong to the specified blog' }
-		}
 
 		const res = await client.query(query)
 
@@ -182,6 +171,7 @@ async function getComments(blog_id: number, comment_id?: number) {
 				message: 'Comment not found'
 			}
 		}
+
 		return response
 	} catch (e) {
 		return {
