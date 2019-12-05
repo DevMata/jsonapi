@@ -1,4 +1,3 @@
-import { commentRegex } from './request-handler'
 import {
 	getComments,
 	postComments,
@@ -6,10 +5,10 @@ import {
 	updateComments,
 	IComment
 } from './db-handler'
+import { commentRegex } from './request-handler'
 
 async function commentsHandler(url: string, method: string, data: any) {
 	let result: any = {}
-	console.log(url, method, data)
 
 	switch (method) {
 		case 'GET':
@@ -44,14 +43,10 @@ async function GET(url: string) {
 async function POST(url: string, comment: IComment) {
 	const params = getUrlParams(url)
 
-	// return params!.comment_id
-	// 	? { status: 405, message: 'POST comment does not need comment Id' }
-	// 	: checkComment(comment.content)
-	// 	? await postComments(Number(params!.blog_id), comment.content)
-	// 	: missingParameters
-
-	return checkComment(comment)
-		? await postComments(Number(params!.blog), comment.content)
+	return params!.comment
+		? { status: 400, message: 'Unnecessary parameter. Id not required at POST' }
+		: checkComment(comment)
+		? await postComments(Number(params!.blog_id), comment.content)
 		: missingParameters
 }
 
