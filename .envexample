@@ -1,0 +1,4 @@
+USER=postgres
+DB=blogs
+PORT=5432
+PASS=123456
