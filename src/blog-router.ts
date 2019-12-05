@@ -17,7 +17,7 @@ async function blogsHandler(url: string, method: string, data: any) {
 			break
 
 		case 'POST':
-			result = await POST(data)
+			result = await POST(url, data)
 			break
 
 		case 'DELETE':
@@ -36,8 +36,12 @@ async function GET(url: string) {
 	return await getBlogs(getBlogId(url))
 }
 
-async function POST(blog: IBlog) {
-	return checkBlog(blog) ? await postBlogs(blog) : missingParameters
+async function POST(url: string, blog: IBlog) {
+	return getBlogId(url)
+		? { status: 400, message: 'Unnecessary parameter. Id not required at POST' }
+		: checkBlog(blog)
+		? await postBlogs(blog)
+		: missingParameters
 }
 
 async function DELETE(url: string) {
