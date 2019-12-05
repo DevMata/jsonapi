@@ -1,16 +1,16 @@
 import { Pool } from 'pg'
 import dotenv from 'dotenv'
 
-interface IPerson {
+interface IBlog {
 	id: number
-	name: string
-	lastName: string
+	title: string
+	content: string
 }
 
 interface IResponse {
 	status: number
 	message?: string
-	queryResult?: any[]
+	result?: any[]
 }
 
 dotenv.config()
@@ -24,8 +24,10 @@ const pool = new Pool({
 })
 
 async function getBlogs(id?: number) {
-	let query = 'SELECT * FROM "Person"'
-	id ? (query += ` WHERE id=${id}`) : ''
+	let query =
+		'SELECT * FROM blog' +
+		(id ? ` WHERE blog_id=${id}` : '') +
+		' ORDER BY modified_at DESC'
 
 	const client = await pool.connect()
 
@@ -37,12 +39,12 @@ async function getBlogs(id?: number) {
 		if (res.rows.length) {
 			response = {
 				status: 200,
-				queryResult: res.rows
+				result: res.rows
 			}
 		} else {
 			response = {
 				status: 404,
-				message: 'Element not found'
+				message: 'Blog not found'
 			}
 		}
 		return response
@@ -57,29 +59,20 @@ async function getBlogs(id?: number) {
 	}
 }
 
-async function postBlogs(person: IPerson) {
-	if (!checkIPerson(person))
-		return {
-			status: 400,
-			message: 'Missing parameters'
-		}
-
-	let queryText =
-		'INSERT INTO "Person" (id,name,"lastName") VALUES ($1,$2,$3) returning id'
+async function postBlogs(blog: IBlog) {
+	const queryText =
+		'INSERT INTO blog (blog_title,blog_content) VALUES ($1,$2) returning *'
 
 	const client = await pool.connect()
 
 	try {
 		await client.query('BEGIN')
-		const res = await client.query(queryText, [
-			person.id,
-			person.name,
-			person.lastName
-		])
+		const res = await client.query(queryText, [blog.title, blog.content])
 		await client.query('COMMIT')
+
 		return {
 			status: 201,
-			queryResult: res.rows
+			result: res.rows
 		}
 	} catch (e) {
 		await client.query('ROLLBACK')
@@ -101,7 +94,7 @@ async function deleteBlogs(id?: number) {
 		if ((validation as IResponse).status === 404) return validation
 
 		await client.query('BEGIN')
-		await client.query('DELETE FROM "Person" WHERE id=$1', [id])
+		await client.query('DELETE FROM blog WHERE blog_id=$1', [id])
 		await client.query('COMMIT')
 
 		return { status: 200, message: 'Blog deleted successfully' }
@@ -117,7 +110,10 @@ async function deleteBlogs(id?: number) {
 	}
 }
 
-async function updateBlogs(id: number, person: IPerson) {
+async function updateBlogs(id: number, blog: IBlog) {
+	const queryText =
+		'UPDATE blog SET blog_title=$1, blog_content=$2, modified_at=NOW() WHERE blog_id=$3 RETURNING *'
+
 	const client = await pool.connect()
 
 	try {
@@ -125,15 +121,10 @@ async function updateBlogs(id: number, person: IPerson) {
 		if ((validation as IResponse).status === 404) return validation
 
 		await client.query('BEGIN')
-
-		const res = await client.query(
-			'UPDATE "Person" SET name=$1, "lastName"=$2 WHERE id=$3 RETURNING *',
-			[person.name, person.lastName, id]
-		)
-
+		const res = await client.query(queryText, [blog.title, blog.content, id])
 		await client.query('COMMIT')
 
-		return { status: 200, queryResult: res.rows }
+		return { status: 200, result: res.rows }
 	} catch (e) {
 		await client.query('ROLLBACK')
 		return {
@@ -145,8 +136,4 @@ async function updateBlogs(id: number, person: IPerson) {
 	}
 }
 
-function checkIPerson(person: IPerson) {
-	return person.id && person.name && person.lastName ? true : false
-}
-
-export { getBlogs, postBlogs, deleteBlogs, updateBlogs, IPerson, IResponse }
+export { getBlogs, postBlogs, deleteBlogs, updateBlogs, IBlog, IResponse }

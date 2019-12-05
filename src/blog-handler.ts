@@ -3,7 +3,7 @@ import {
 	postBlogs,
 	deleteBlogs,
 	updateBlogs,
-	IPerson
+	IBlog
 } from './db-handler'
 
 const blogRegex = /\/blogs\/(?<id>[0-9]+)/
@@ -32,14 +32,12 @@ async function blogsHandler(url: string, method: string, data: any) {
 	return result
 }
 
-async function POST(person: IPerson) {
-	return checkIPerson(person) ? await postBlogs(person) : missingParameters
+async function POST(blog: IBlog) {
+	return checkBlog(blog) ? await postBlogs(blog) : missingParameters
 }
 
 async function GET(url: string) {
-	const id = getUrlId(url)
-
-	return await getBlogs(id)
+	return await getBlogs(getUrlId(url))
 }
 
 async function DELETE(url: string) {
@@ -48,13 +46,11 @@ async function DELETE(url: string) {
 	return id ? await deleteBlogs(id) : missingId
 }
 
-async function PUT(url: string, person: IPerson) {
+async function PUT(url: string, blog: IBlog) {
 	const id = getUrlId(url)
-
-	person.id = Number.MAX_SAFE_INTEGER
 	return id
-		? checkIPerson(person)
-			? await updateBlogs(id, person)
+		? checkBlog(blog)
+			? await updateBlogs(id, blog)
 			: missingParameters
 		: missingId
 }
@@ -65,8 +61,8 @@ function getUrlId(url: string) {
 		: undefined
 }
 
-function checkIPerson(person: IPerson) {
-	return person.id && person.name && person.lastName ? true : false
+function checkBlog(blog: IBlog) {
+	return blog.title && blog.content ? true : false
 }
 
 const missingId = {
@@ -76,7 +72,7 @@ const missingId = {
 
 const missingParameters = {
 	status: 400,
-	message: 'Missing parameters'
+	message: 'Missing parameters. Title and content are required'
 }
 
 export { blogsHandler }
