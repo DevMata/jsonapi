@@ -7,6 +7,11 @@ interface IBlog {
 	content: string
 }
 
+interface IComment {
+	id: number
+	content: string
+}
+
 interface IResponse {
 	status: number
 	message?: string

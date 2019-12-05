@@ -6,7 +6,7 @@ import {
 	IBlog
 } from './db-handler'
 
-const blogRegex = /\/blogs\/(?<id>[0-9]+)/
+import { blogRegex } from './request-handler'
 
 async function blogsHandler(url: string, method: string, data: any) {
 	let result: any = {}
@@ -32,22 +32,22 @@ async function blogsHandler(url: string, method: string, data: any) {
 	return result
 }
 
+async function GET(url: string) {
+	return await getBlogs(getBlogId(url))
+}
+
 async function POST(blog: IBlog) {
 	return checkBlog(blog) ? await postBlogs(blog) : missingParameters
 }
 
-async function GET(url: string) {
-	return await getBlogs(getUrlId(url))
-}
-
 async function DELETE(url: string) {
-	const id = getUrlId(url)
+	const id = getBlogId(url)
 
 	return id ? await deleteBlogs(id) : missingId
 }
 
 async function PUT(url: string, blog: IBlog) {
-	const id = getUrlId(url)
+	const id = getBlogId(url)
 	return id
 		? checkBlog(blog)
 			? await updateBlogs(id, blog)
@@ -55,14 +55,14 @@ async function PUT(url: string, blog: IBlog) {
 		: missingId
 }
 
-function getUrlId(url: string) {
+function getBlogId(url: string) {
 	return blogRegex.test(url)
-		? Number(blogRegex.exec(url)!.groups!.id)
+		? Number(blogRegex.exec(url)!.groups!.blog)
 		: undefined
 }
 
 function checkBlog(blog: IBlog) {
-	return blog.title && blog.content ? true : false
+	return blog ? (blog.title && blog.content ? true : false) : false
 }
 
 const missingId = {
