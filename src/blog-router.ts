@@ -67,7 +67,7 @@ function checkBlog(blog: IBlog) {
 
 const missingId = {
 	status: 400,
-	message: 'Missing Id'
+	message: 'Missing blog Id'
 }
 
 const missingParameters = {
