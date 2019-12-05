@@ -1,4 +1,4 @@
-USER=postgres
-DB=blogs
+USER=postgres **use a user with privileges for CRUD operations
+DB=blogs **this is the name of the backuped database
 PORT=5432
 PASS=123456
