@@ -14,6 +14,7 @@ JSON API implemented with Typescript. Allows to manage anonymous blogs and their
 
 - Endpoint of blogs is localhost:3000/blogs/:id
 - Endpoint of comments is localhost:3000/blogs/:id/comments/:id
+- API only allows JSON
 
 ## API examples
 
