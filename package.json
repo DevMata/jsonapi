@@ -1,6 +1,6 @@
 {
 	"name": "jsonapi",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "A JSON API for a blog serve",
 	"main": "index.js",
 	"scripts": {
@@ -19,12 +19,12 @@
 	},
 	"homepage": "https://github.com/DevMata/jsonapi#readme",
 	"dependencies": {
-		"@types/dotenv": "^8.2.0",
-		"@types/node": "^12.12.14",
-		"@types/pg": "^7.11.2",
 		"pg": "^7.14.0"
 	},
 	"devDependencies": {
+		"@types/dotenv": "^8.2.0",
+		"@types/node": "^12.20.5",
+		"@types/pg": "^7.14.11",
 		"eslint": "^6.7.2",
 		"eslint-config-prettier": "^6.7.0",
 		"eslint-plugin-prettier": "^3.1.1",
