@@ -12,7 +12,7 @@
 		"type": "git",
 		"url": "git+https://github.com/DevMata/jsonapi.git"
 	},
-	"author": "Antonio Mata",
+	"author": "Antonio Mata <hildeamp@gmail.com>",
 	"license": "ISC",
 	"bugs": {
 		"url": "https://github.com/DevMata/jsonapi/issues"
