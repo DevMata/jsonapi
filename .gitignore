@@ -2,3 +2,5 @@
 *try*
 .env
 **/*.js
+
+.idea
