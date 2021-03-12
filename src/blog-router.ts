@@ -1,82 +1,82 @@
 import {
-	getBlogs,
-	postBlogs,
-	deleteBlogs,
-	updateBlogs,
-	IBlog
-} from './db-handler'
+  getBlogs,
+  postBlogs,
+  deleteBlogs,
+  updateBlogs,
+  IBlog,
+} from './db-handler';
 
-import { blogRegex } from './request-handler'
+import { blogRegex } from './request-handler';
 
 async function blogsHandler(url: string, method: string, data: any) {
-	let result: any = {}
+  let result: any = {};
 
-	switch (method) {
-		case 'GET':
-			result = await GET(url)
-			break
+  switch (method) {
+    case 'GET':
+      result = await GET(url);
+      break;
 
-		case 'POST':
-			result = await POST(url, data)
-			break
+    case 'POST':
+      result = await POST(url, data);
+      break;
 
-		case 'DELETE':
-			result = await DELETE(url)
-			break
+    case 'DELETE':
+      result = await DELETE(url);
+      break;
 
-		case 'PUT':
-			result = await PUT(url, data)
-			break
-	}
+    case 'PUT':
+      result = await PUT(url, data);
+      break;
+  }
 
-	return result
+  return result;
 }
 
 async function GET(url: string) {
-	return await getBlogs(getBlogId(url))
+  return await getBlogs(getBlogId(url));
 }
 
 async function POST(url: string, blog: IBlog) {
-	return getBlogId(url)
-		? { status: 400, message: 'Unnecessary parameter. Id not required at POST' }
-		: checkBlog(blog)
-		? await postBlogs(blog)
-		: missingParameters
+  return getBlogId(url)
+    ? { status: 400, message: 'Unnecessary parameter. Id not required at POST' }
+    : checkBlog(blog)
+    ? await postBlogs(blog)
+    : missingParameters;
 }
 
 async function DELETE(url: string) {
-	const id = getBlogId(url)
+  const id = getBlogId(url);
 
-	return id ? await deleteBlogs(id) : missingId
+  return id ? await deleteBlogs(id) : missingId;
 }
 
 async function PUT(url: string, blog: IBlog) {
-	const id = getBlogId(url)
-	return id
-		? checkBlog(blog)
-			? await updateBlogs(id, blog)
-			: missingParameters
-		: missingId
+  const id = getBlogId(url);
+  return id
+    ? checkBlog(blog)
+      ? await updateBlogs(id, blog)
+      : missingParameters
+    : missingId;
 }
 
 function getBlogId(url: string) {
-	return blogRegex.test(url)
-		? Number(blogRegex.exec(url)!.groups!.blog)
-		: undefined
+  return blogRegex.test(url)
+    ? Number(blogRegex.exec(url)!.groups!.blog)
+    : undefined;
 }
 
 function checkBlog(blog: IBlog) {
-	return blog ? (blog.title && blog.content ? true : false) : false
+  return blog ? (blog.title && blog.content ? true : false) : false;
 }
 
 const missingId = {
-	status: 400,
-	message: 'Missing blog Id'
-}
+  status: 400,
+  message: 'Missing blog Id',
+};
 
 const missingParameters = {
-	status: 400,
-	message: 'Missing parameters. Title and content are required'
-}
+  status: 400,
+  message: 'Missing parameters. Title and content are required',
+};
 
-export { blogsHandler }
+export { blogsHandler };
