@@ -1,36 +1,36 @@
 {
-	"name": "jsonapi",
-	"version": "1.1.0",
-	"description": "A JSON API for a blog serve",
-	"main": "index.js",
-	"scripts": {
-		"compile": "tsc && npx prettier ./**/*.js --write & echo Compiled",
-		"watch": "nodemon --watch **/*.ts --exec ts-node main.ts",
-		"start": "node main.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/DevMata/jsonapi.git"
-	},
-	"author": "Antonio Mata <hildeamp@gmail.com>",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/DevMata/jsonapi/issues"
-	},
-	"homepage": "https://github.com/DevMata/jsonapi#readme",
-	"dependencies": {
-		"pg": "^7.14.0"
-	},
-	"devDependencies": {
-		"@types/dotenv": "^8.2.0",
-		"@types/node": "^12.20.5",
-		"@types/pg": "^7.14.11",
-		"eslint": "^6.7.2",
-		"eslint-config-prettier": "^6.7.0",
-		"eslint-plugin-prettier": "^3.1.1",
-		"nodemon": "^2.0.1",
-		"prettier": "^1.19.1",
-		"ts-node": "^8.5.4",
-		"typescript": "^3.7.3"
-	}
+  "name": "jsonapi",
+  "version": "1.1.0",
+  "description": "A Blog json API. I tried to build it using only the http native module",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon --watch **/*.ts --exec ts-node main.ts",
+    "prestart": "tsc",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevMata/jsonapi.git"
+  },
+  "author": "Antonio Mata <antonio.mata.sv@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DevMata/jsonapi/issues"
+  },
+  "homepage": "https://github.com/DevMata/jsonapi#readme",
+  "dependencies": {
+    "pg": "^7.14.0"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^12.20.5",
+    "@types/pg": "^7.14.11",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "nodemon": "^2.0.1",
+    "prettier": "^1.19.1",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  }
 }
