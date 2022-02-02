@@ -6,7 +6,7 @@ JSON API implemented with Typescript. Allows managing anonymous blogs and their 
 
 1. run `npm install`
 2. restore database from database.sql file in project folder
-3. Use example.env as guide to connect to db
+3. Use .env.example as guide to connect to db
 
 ## Running
 ### Dev
