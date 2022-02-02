@@ -1,20 +1,27 @@
 # BLOG JSON API
 
-JSON API implemented with Typescript. Allows to manage anonymous blogs and their comments.
+JSON API implemented with Typescript. Allows managing anonymous blogs and their comments.
 
 ## Start
 
 1. run `npm install`
 2. restore database from database.sql file in project folder
-3. Use .envexample as guide to connect to PostgreSQL
-4. run `npm run compile`
-5. run `npm run start`
+3. Use example.env as guide to connect to db
 
-## Considerations
+## Running
+### Dev
+```bash
+$ npm dev
+```
 
-- Endpoint of blogs is localhost:3000/blogs/:id
-- Endpoint of comments is localhost:3000/blogs/:id/comments/:id
-- API only allows JSON
+### Prod
+```bash
+$ npm start
+```
+
+## Endpoints
+- Blogs => /blogs
+- Comments => /blogs/:id/comments
 
 ## API examples
 

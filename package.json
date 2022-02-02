@@ -4,7 +4,7 @@
   "description": "A Blog json API. I tried to build it using only the http native module",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon --watch **/*.ts --exec ts-node main.ts",
+    "dev": "nodemon --watch **/*.ts --exec ts-node main.ts",
     "prestart": "tsc",
     "start": "node main.js"
   },
