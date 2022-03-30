@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/DevMata/jsonapi#readme",
   "dependencies": {
+    "node-pg-migrate": "^6.2.1",
     "pg": "^7.14.0"
   },
   "devDependencies": {
